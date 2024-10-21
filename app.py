@@ -1,15 +1,9 @@
 import os
-import time  #####using ss
-
-##s.record v3. updated
-
-from flask import Flask, render_template, request
-
-app = Flask(__name__)
-
-# Configure Selenium to use Chrome in headless mode
-from flask import Flask, render_template, request
 import time
+import webbrowser  # Import webbrowser module
+from threading import Timer
+
+from flask import Flask, render_template, request
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -17,7 +11,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-from concurrent.futures import ThreadPoolExecutor
 import easyocr
 
 app = Flask(__name__)
@@ -41,7 +34,6 @@ def create_driver():
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.reader = easyocr.Reader(['en'], gpu=False)  # Disable GPU for EasyOCR
-  # Initialize EasyOCR once and store it in the driver instance
     return driver
 
 # Function to open a URL and ensure the page loads
@@ -123,5 +115,10 @@ def home():
 
     return render_template("index.html")
 
+def open_browser():
+    """Open the Flask app in the default browser."""
+    webbrowser.open_new("http://127.0.0.1:5000/")
+
 if __name__ == "__main__":
+    Timer(1, open_browser).start()  # Delay the browser opening slightly to avoid race conditions
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
