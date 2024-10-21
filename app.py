@@ -1,4 +1,3 @@
-import os
 import time
 import webbrowser  # Import webbrowser module
 from threading import Timer
@@ -119,6 +118,8 @@ def open_browser():
     """Open the Flask app in the default browser."""
     webbrowser.open_new("http://127.0.0.1:5000/")
 
+
 if __name__ == "__main__":
-    Timer(1, open_browser).start()  # Delay the browser opening slightly to avoid race conditions
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    app.run()
+
+
